@@ -161,9 +161,11 @@
           <div class="input-group"><label for="km">Kilometers</label><input type="number" id="km" /></div>
           <div class="input-group"><label for="meters">Meters</label><input type="number" id="meters" /></div>
           <div class="input-group"><label for="cm">Centimeters</label><input type="number" id="cm" /></div>
+          <div class="input-group"><label for="mm">Millimeters</label><input type="number" id="mm" /></div>
         </div>
         <div class="column">
           <div class="input-group"><label for="miles">Miles</label><input type="number" id="miles" /></div>
+          <div class="input-group"><label for="yards">Yards</label><input type="number" id="yards" /></div>
           <div class="input-group"><label for="feet">Feet</label><input type="number" id="feet" /></div>
           <div class="input-group"><label for="inches">Inches</label><input type="number" id="inches" /></div>
         </div>
@@ -288,16 +290,17 @@
   let updating = false;
 
   const metricInputs = [
-    'km', 'meters', 'cm', 'celsius', 'kg', 'grams', 'liters', 'kmh',
+    'km', 'meters', 'cm', 'mm', 'celsius', 'kg', 'grams', 'liters', 'kmh',
     'sqm', 'sqkm', 'l100km', 'kpa', 'joules', 'newtons'
   ];
   const imperialInputs = [
-    'miles', 'feet', 'inches', 'fahrenheit', 'lbs', 'ounces', 'gallons', 'mph',
+    'miles', 'yards', 'feet', 'inches', 'fahrenheit', 'lbs', 'ounces', 'gallons', 'mph',
     'sqft', 'sqmi', 'mpg', 'psi', 'btu', 'lbf'
   ];
 
   // Conversion ratios
   const conversions = {
+    meters_yards: 1.09361,
     km_miles: 0.621371,
     meters_feet: 3.28084,
     cm_inches: 0.393701,
@@ -343,40 +346,70 @@
       case 'km':
         setValue('miles', val * conversions.km_miles);
         setValue('meters', val * 1000);
+        setValue('yards', val * 1093.61);
         setValue('feet', val * 3280.84);
         setValue('cm', val * 100000);
+        setValue('mm', val * 1000000);
         setValue('inches', val * 39370.1);
         break;
       case 'meters':
         setValue('km', val / 1000);
+        setValue('yards', val * conversions.meters_yards);
         setValue('feet', val * conversions.meters_feet);
         setValue('miles', val / 1609.34);
         setValue('cm', val * 100);
+        setValue('mm', val * 1000);
         setValue('inches', val * 39.3701);
         break;
       case 'cm':
         setValue('meters', val / 100);
+        setValue('yards', val / 91.44);
         setValue('inches', val * conversions.cm_inches);
         setValue('feet', val / 30.48);
         setValue('km', val / 100000);
         setValue('miles', val / 160934);
+        setValue('mm', val * 10);
+        break;
+      case 'mm':
+        setValue('meters', val / 1000);
+        setValue('cm', val / 10);
+        setValue('yards', val / 914.4);
+        setValue('inches', val / 25.4);
+        setValue('feet', val / 304.8);
+        setValue('km', val / 1000000);
+        setValue('miles', val / 1609340);
         break;
       case 'miles':
         setValue('km', val / conversions.km_miles);
+        setValue('yards', val * 1760);
         setValue('feet', val * 5280);
         setValue('meters', val * 1609.34);
-        setValue('inches', val * 63360);
         setValue('cm', val * 160934);
+        setValue('mm', val * 1609340);
+        setValue('inches', val * 63360);
+        break;
+      case 'yards':
+        setValue('meters', val / 1.09361);
+        setValue('km', val / 1093.61);
+        setValue('miles', val / 1760);
+        setValue('feet', val * 3);
+        setValue('inches', val * 36);
+        setValue('cm', val * 91.44);
+        setValue('mm', val * 914.4);
         break;
       case 'feet':
         setValue('meters', val / conversions.meters_feet);
+        setValue('yards', val / 3);
         setValue('miles', val / 5280);
         setValue('km', val / 3280.84);
         setValue('inches', val * 12);
         setValue('cm', val * 30.48);
+        setValue('mm', val * 304.8);
         break;
       case 'inches':
         setValue('cm', val / conversions.cm_inches);
+        setValue('mm', val * 25.4);
+        setValue('yards', val / 36);
         setValue('feet', val / 12);
         setValue('meters', val / 39.3701);
         setValue('km', val / 39370.1);
@@ -608,7 +641,7 @@
   }
 
   // Attach event listeners
-  ['km', 'meters', 'cm', 'miles', 'feet', 'inches'].forEach(id => {
+  ['km', 'meters', 'cm', 'mm', 'miles', 'yards', 'feet', 'inches'].forEach(id => {
     document.getElementById(id).addEventListener('input', convertDistance);
   });
 
