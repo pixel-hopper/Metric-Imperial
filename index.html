@@ -1,143 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Metric ⇄ Imperial</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔢</text></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  
+  <!-- Favicon (Base64 encoded SVG with emoji) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHRleHQgeD0iMCIgeT0iNTAiIGZvbnQtc2l6ZT0iNTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiI+8J+QhjwvdGV4dD4KPC9zdmc+Cg==">
+  
   <style>
     :root {
-      --color-bg-light: #f1f3f4;
-      --color-bg-dark: #121212;
-      --color-primary: #4285f4;
-      --color-text-light: #202124;
-      --color-text-dark: #e8eaed;
-      --color-bubble-light: #ffffff;
-      --color-bubble-dark: #1e1e1e;
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --border-color: #ddd;
+      --highlight-color: #0d6efd;
+      --header-bg: #f2f2f2;
+      --row-hover: #eee;
+      --input-bg: #fff;
+      --input-border: #ccc;
     }
 
     @media (prefers-color-scheme: dark) {
-      body {
-        background-color: var(--color-bg-dark);
-        color: var(--color-text-dark);
-      }
-      input {
-        background-color: #2c2c2c;
-        color: #e8eaed;
-      }
-      .bubble {
-        background-color: var(--color-bubble-dark);
-      }
-    }
-
-    @media (prefers-color-scheme: light) {
-      body {
-        background-color: var(--color-bg-light);
-        color: var(--color-text-light);
-      }
-      input {
-        background-color: #ffffff;
-        color: #202124;
-      }
-      .bubble {
-        background-color: var(--color-bubble-light);
+      :root {
+        --bg-color: #1e1e1e;
+        --text-color: #e0e0e0;
+        --header-bg: #2d2d2d;
+        --border-color: #444;
+        --row-hover: #3a3a3a;
+        --input-bg: #2d2d2d;
+        --input-border: #555;
       }
     }
 
     body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 2rem;
-      transition: background 0.3s ease, color 0.3s ease;
+      font-family: sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    h1 { 
+      text-align: center; 
+      font-size: 2em; 
+      margin-bottom: 20px; 
+      color: var(--text-color); 
     }
 
     h2 {
       text-align: center;
-      font-weight: 500;
-      /* Remove color or set to inherit */
-      /* color: var(--color-primary); */
-      color: inherit;
-      margin-bottom: 2rem;
-      font-size: 2rem;
+      font-size: 1.8em;
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
     }
 
     h3 {
-      margin-bottom: 1rem;
-      /* color: var(--color-primary); */
-      color: inherit;
-      font-weight: 500;
-      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      font-size: 1.3rem;
+      color: var(--text-color);
+      text-align: center;
     }
 
-
     .container {
-      max-width: 960px;
+      width: 100%;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
     .bubble {
-      border-radius: 2rem;
-      padding: 1.5rem;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
       margin-bottom: 2rem;
-      transition: background 0.3s ease;
+      border-collapse: collapse;
+      border: 1px solid var(--border-color);
     }
-
-    .conversion-group {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
+    
+    .bubble th, .bubble td {
+      padding: 12px 15px;
+      text-align: left;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-color);
     }
-
-    .column {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+    
+    .bubble th {
+      background-color: var(--header-bg);
+      font-weight: bold;
+      text-align: center;
+    }
+    
+    .bubble th[colspan="2"] {
+      text-align: center;
     }
 
     .input-group {
       display: flex;
       flex-direction: column;
+      gap: 0.5rem;
     }
 
     label {
-      font-size: 0.9rem;
-      margin-bottom: 0.3rem;
-      opacity: 0.8;
+      font-weight: 500;
+      color: var(--text-color);
     }
 
-    input {
-      border: none;
-      border-radius: 28px;
-      padding: 0.9rem 1.2rem;
-      font-size: 1rem;
-      outline: none;
-      transition: box-shadow 0.2s ease;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      box-sizing: border-box;
+      background-color: transparent;
+      color: var(--text-color);
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      box-sizing: border-box;
+      background-color: var(--input-bg);
+      color: var(--text-color);
     }
 
     input:focus {
-      box-shadow: 0 0 0 2px var(--color-primary);
+      outline: none;
+      border-color: #4285f4;
+      box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
     }
 
-    /* Search bar styling */
+    .search-container {
+      margin: 20px 0;
+      width: 100%;
+      max-width: 600px;
+    }
+
     #searchInput {
       width: 100%;
-      padding: 0.8rem 1rem;
-      font-size: 1rem;
-      border-radius: 28px;
-      border: 1px solid #ccc;
+      padding: 12px;
+      font-size: 1.2em;
+      border: 2px solid var(--border-color);
+      border-radius: 5px;
       box-sizing: border-box;
-      margin: 0 auto 2rem auto;
-      max-width: 960px;
-      display: block;
-      transition: border-color 0.3s ease;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
     }
 
     #searchInput:focus {
-      border-color: var(--color-primary);
       outline: none;
+      border-color: var(--highlight-color);
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+      
+      h2 {
+        font-size: 1.5em;
+      }
+      
+      h3 {
+        font-size: 1.2em;
+      }
+      
+      .bubble {
+        padding: 1.2rem;
+      }
+      
+      .conversion-group {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -145,144 +184,183 @@
 
   <h2>Metric ⇄ Imperial</h2>
 
-  <input
-    type="search"
-    id="searchInput"
-    placeholder="Search conversions..."
-    autocomplete="off"
-  />
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search conversions..." oninput="filterConversions()">
+  </div>
 
   <div class="container">
 
-    <div class="bubble">
-      <h3>Distance</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="km">Kilometers</label><input type="number" id="km" /></div>
-          <div class="input-group"><label for="meters">Meters</label><input type="number" id="meters" /></div>
-          <div class="input-group"><label for="cm">Centimeters</label><input type="number" id="cm" /></div>
-          <div class="input-group"><label for="mm">Millimeters</label><input type="number" id="mm" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="miles">Miles</label><input type="number" id="miles" /></div>
-          <div class="input-group"><label for="yards">Yards</label><input type="number" id="yards" /></div>
-          <div class="input-group"><label for="feet">Feet</label><input type="number" id="feet" /></div>
-          <div class="input-group"><label for="inches">Inches</label><input type="number" id="inches" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Distance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="km">Kilometers</label><input type="number" id="km" oninput="convertDistance(event)" /></div></td>
+          <td><div class="input-group"><label for="miles">Miles</label><input type="number" id="miles" oninput="convertDistance(event)" /></div></td>
+        </tr>
+        <tr>
+          <td><div class="input-group"><label for="meters">Meters</label><input type="number" id="meters" oninput="convertDistance(event)" /></div></td>
+          <td><div class="input-group"><label for="yards">Yards</label><input type="number" id="yards" oninput="convertDistance(event)" /></div></td>
+        </tr>
+        <tr>
+          <td><div class="input-group"><label for="cm">Centimeters</label><input type="number" id="cm" oninput="convertDistance(event)" /></div></td>
+          <td><div class="input-group"><label for="feet">Feet</label><input type="number" id="feet" oninput="convertDistance(event)" /></div></td>
+        </tr>
+        <tr>
+          <td><div class="input-group"><label for="mm">Millimeters</label><input type="number" id="mm" oninput="convertDistance(event)" /></div></td>
+          <td><div class="input-group"><label for="inches">Inches</label><input type="number" id="inches" oninput="convertDistance(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Temperature</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="celsius">Celsius</label><input type="number" id="celsius" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="fahrenheit">Fahrenheit</label><input type="number" id="fahrenheit" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Temperature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="celsius">Celsius</label><input type="number" id="celsius" oninput="convertTemperature(event)" /></div></td>
+          <td><div class="input-group"><label for="fahrenheit">Fahrenheit</label><input type="number" id="fahrenheit" oninput="convertTemperature(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Weight / Mass</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="kg">Kilograms</label><input type="number" id="kg" /></div>
-          <div class="input-group"><label for="grams">Grams</label><input type="number" id="grams" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="lbs">Pounds</label><input type="number" id="lbs" /></div>
-          <div class="input-group"><label for="ounces">Ounces</label><input type="number" id="ounces" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Weight</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="kg">Kilograms</label><input type="number" id="kg" oninput="convertWeight(event)" /></div></td>
+          <td><div class="input-group"><label for="pounds">Pounds</label><input type="number" id="pounds" oninput="convertWeight(event)" /></div></td>
+        </tr>
+        <tr>
+          <td><div class="input-group"><label for="grams">Grams</label><input type="number" id="grams" oninput="convertWeight(event)" /></div></td>
+          <td><div class="input-group"><label for="ounces">Ounces</label><input type="number" id="ounces" oninput="convertWeight(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Volume</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="liters">Liters</label><input type="number" id="liters" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="gallons">Gallons</label><input type="number" id="gallons" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Volume</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="liters">Liters</label><input type="number" id="liters" oninput="convertVolume(event)" /></div></td>
+          <td><div class="input-group"><label for="gallons">Gallons</label><input type="number" id="gallons" oninput="convertVolume(event)" /></div></td>
+        </tr>
+        <tr>
+          <td><div class="input-group"><label for="ml">Milliliters</label><input type="number" id="ml" oninput="convertVolume(event)" /></div></td>
+          <td><div class="input-group"><label for="fluidOunces">Fluid Ounces</label><input type="number" id="fluidOunces" oninput="convertVolume(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Speed</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="kmh">Kilometers/hour</label><input type="number" id="kmh" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="mph">Miles/hour</label><input type="number" id="mph" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Speed</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="kmh">Kilometers per hour</label><input type="number" id="kmh" oninput="convertSpeed(event)" /></div></td>
+          <td><div class="input-group"><label for="mph">Miles per hour</label><input type="number" id="mph" oninput="convertSpeed(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Area</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="sqm">Square meters</label><input type="number" id="sqm" /></div>
-          <div class="input-group"><label for="sqkm">Square kilometers</label><input type="number" id="sqkm" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="sqft">Square feet</label><input type="number" id="sqft" /></div>
-          <div class="input-group"><label for="sqmi">Square miles</label><input type="number" id="sqmi" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Area</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="sqMeters">Square Meters</label><input type="number" id="sqMeters" oninput="convertArea(event)" /></div></td>
+          <td><div class="input-group"><label for="sqFeet">Square Feet</label><input type="number" id="sqFeet" oninput="convertArea(event)" /></div></td>
+        </tr>
+        <tr>
+          <td><div class="input-group"><label for="hectares">Hectares</label><input type="number" id="hectares" oninput="convertArea(event)" /></div></td>
+          <td><div class="input-group"><label for="acres">Acres</label><input type="number" id="acres" oninput="convertArea(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Fuel Economy</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="l100km">Liters/100km</label><input type="number" id="l100km" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="mpg">Miles per gallon</label><input type="number" id="mpg" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Fuel Economy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="litersPer100km">Liters per 100 km</label><input type="number" id="litersPer100km" oninput="convertFuelEconomy(event)" /></div></td>
+          <td><div class="input-group"><label for="mpg">Miles per gallon</label><input type="number" id="mpg" oninput="convertFuelEconomy(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Pressure</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="kpa">Kilopascal</label><input type="number" id="kpa" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="psi">PSI</label><input type="number" id="psi" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Pressure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="pascals">Pascals</label><input type="number" id="pascals" oninput="convertPressure(event)" /></div></td>
+          <td><div class="input-group"><label for="psi">PSI (pounds per square inch)</label><input type="number" id="psi" oninput="convertPressure(event)" /></div></td>
+        </tr>
+        <tr>
+          <td><div class="input-group"><label for="kpa">Kilopascals</label><input type="number" id="kpa" oninput="convertPressure(event)" /></div></td>
+          <td><div class="input-group"><label for="bar">Bar</label><input type="number" id="bar" oninput="convertPressure(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Energy</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="joules">Joules</label><input type="number" id="joules" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="btu">BTUs</label><input type="number" id="btu" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Energy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="joules">Joules</label><input type="number" id="joules" oninput="convertEnergy(event)" /></div></td>
+          <td><div class="input-group"><label for="calories">Calories</label><input type="number" id="calories" oninput="convertEnergy(event)" /></div></td>
+        </tr>
+        <tr>
+          <td><div class="input-group"><label for="kilojoules">Kilojoules</label><input type="number" id="kilojoules" oninput="convertEnergy(event)" /></div></td>
+          <td><div class="input-group"><label for="kilocalories">Kilocalories (food)</label><input type="number" id="kilocalories" oninput="convertEnergy(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div class="bubble">
-      <h3>Force</h3>
-      <div class="conversion-group">
-        <div class="column">
-          <div class="input-group"><label for="newtons">Newtons</label><input type="number" id="newtons" /></div>
-        </div>
-        <div class="column">
-          <div class="input-group"><label for="lbf">Pound-force</label><input type="number" id="lbf" /></div>
-        </div>
-      </div>
-    </div>
+    <table class="bubble">
+      <thead>
+        <tr>
+          <th colspan="2">Force</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="input-group"><label for="newtons">Newtons</label><input type="number" id="newtons" oninput="convertForce(event)" /></div></td>
+          <td><div class="input-group"><label for="poundForce">Pound-force</label><input type="number" id="poundForce" oninput="convertForce(event)" /></div></td>
+        </tr>
+      </tbody>
+    </table>
 
   </div>
 
@@ -305,7 +383,7 @@
     meters_feet: 3.28084,
     cm_inches: 0.393701,
     celsius_fahrenheit: [c => c * 9/5 + 32, f => (f - 32) * 5/9],
-    kg_lbs: 2.20462,
+    kg_pounds: 2.20462,  // Changed from kg_lbs to kg_pounds to match the function call
     grams_ounces: 0.035274,
     liters_gallons: 0.264172,
     kmh_mph: 0.621371,
@@ -314,20 +392,19 @@
     l100km_mpg: [l => 235.215 / l, m => 235.215 / m],
     kpa_psi: 0.145038,
     joules_btu: 0.000947817,
-    newtons_lbf: 0.224809,
   };
 
   function clearAllExcept(exceptId) {
     if (updating) return;
     updating = true;
-
-    const inputs = document.querySelectorAll('input[type="number"]');
-    inputs.forEach(input => {
+    
+    const allInputs = document.querySelectorAll('input[type="number"]');
+    allInputs.forEach(input => {
       if (input.id !== exceptId) {
         input.value = '';
       }
     });
-
+    
     updating = false;
   }
 
@@ -344,76 +421,76 @@
 
     switch (e.target.id) {
       case 'km':
-        setValue('miles', val * conversions.km_miles);
+        setValue('miles', val * 0.621371);
         setValue('meters', val * 1000);
-        setValue('yards', val * 1093.61);
-        setValue('feet', val * 3280.84);
         setValue('cm', val * 100000);
         setValue('mm', val * 1000000);
+        setValue('feet', val * 3280.84);
         setValue('inches', val * 39370.1);
-        break;
-      case 'meters':
-        setValue('km', val / 1000);
-        setValue('yards', val * conversions.meters_yards);
-        setValue('feet', val * conversions.meters_feet);
-        setValue('miles', val / 1609.34);
-        setValue('cm', val * 100);
-        setValue('mm', val * 1000);
-        setValue('inches', val * 39.3701);
-        break;
-      case 'cm':
-        setValue('meters', val / 100);
-        setValue('yards', val / 91.44);
-        setValue('inches', val * conversions.cm_inches);
-        setValue('feet', val / 30.48);
-        setValue('km', val / 100000);
-        setValue('miles', val / 160934);
-        setValue('mm', val * 10);
-        break;
-      case 'mm':
-        setValue('meters', val / 1000);
-        setValue('cm', val / 10);
-        setValue('yards', val / 914.4);
-        setValue('inches', val / 25.4);
-        setValue('feet', val / 304.8);
-        setValue('km', val / 1000000);
-        setValue('miles', val / 1609340);
+        setValue('yards', val * 1093.61);
         break;
       case 'miles':
-        setValue('km', val / conversions.km_miles);
-        setValue('yards', val * 1760);
-        setValue('feet', val * 5280);
+        setValue('km', val * 1.60934);
         setValue('meters', val * 1609.34);
         setValue('cm', val * 160934);
         setValue('mm', val * 1609340);
+        setValue('feet', val * 5280);
         setValue('inches', val * 63360);
+        setValue('yards', val * 1760);
         break;
-      case 'yards':
-        setValue('meters', val / 1.09361);
-        setValue('km', val / 1093.61);
-        setValue('miles', val / 1760);
-        setValue('feet', val * 3);
-        setValue('inches', val * 36);
-        setValue('cm', val * 91.44);
-        setValue('mm', val * 914.4);
+      case 'meters':
+        setValue('km', val / 1000);
+        setValue('miles', val * 0.000621371);
+        setValue('cm', val * 100);
+        setValue('mm', val * 1000);
+        setValue('feet', val * 3.28084);
+        setValue('inches', val * 39.3701);
+        setValue('yards', val * 1.09361);
+        break;
+      case 'cm':
+        setValue('km', val / 100000);
+        setValue('miles', val / 160934);
+        setValue('meters', val / 100);
+        setValue('mm', val * 10);
+        setValue('feet', val / 30.48);
+        setValue('inches', val / 2.54);
+        setValue('yards', val / 91.44);
+        break;
+      case 'mm':
+        setValue('km', val / 1000000);
+        setValue('miles', val / 1609340);
+        setValue('meters', val / 1000);
+        setValue('cm', val / 10);
+        setValue('feet', val / 304.8);
+        setValue('inches', val / 25.4);
+        setValue('yards', val / 914.4);
         break;
       case 'feet':
-        setValue('meters', val / conversions.meters_feet);
-        setValue('yards', val / 3);
-        setValue('miles', val / 5280);
         setValue('km', val / 3280.84);
-        setValue('inches', val * 12);
+        setValue('miles', val / 5280);
+        setValue('meters', val / 3.28084);
         setValue('cm', val * 30.48);
         setValue('mm', val * 304.8);
+        setValue('inches', val * 12);
+        setValue('yards', val / 3);
         break;
       case 'inches':
-        setValue('cm', val / conversions.cm_inches);
-        setValue('mm', val * 25.4);
-        setValue('yards', val / 36);
-        setValue('feet', val / 12);
-        setValue('meters', val / 39.3701);
         setValue('km', val / 39370.1);
         setValue('miles', val / 63360);
+        setValue('meters', val / 39.3701);
+        setValue('cm', val * 2.54);
+        setValue('mm', val * 25.4);
+        setValue('feet', val / 12);
+        setValue('yards', val / 36);
+        break;
+      case 'yards':
+        setValue('km', val / 1093.61);
+        setValue('miles', val / 1760);
+        setValue('meters', val / 1.09361);
+        setValue('cm', val * 91.44);
+        setValue('mm', val * 914.4);
+        setValue('feet', val * 3);
+        setValue('inches', val * 36);
         break;
     }
 
@@ -453,24 +530,24 @@
 
     switch(e.target.id) {
       case 'kg':
-        setValue('lbs', val * conversions.kg_lbs);
+        setValue('pounds', val * conversions.kg_pounds);
         setValue('grams', val * 1000);
         setValue('ounces', val * 35.274);
         break;
       case 'grams':
         setValue('kg', val / 1000);
+        setValue('pounds', val / 453.592);
         setValue('ounces', val * conversions.grams_ounces);
-        setValue('lbs', val / 453.592);
         break;
-      case 'lbs':
-        setValue('kg', val / conversions.kg_lbs);
-        setValue('ounces', val * 16);
+      case 'pounds':
+        setValue('kg', val / conversions.kg_pounds);
         setValue('grams', val * 453.592);
+        setValue('ounces', val * 16);
         break;
       case 'ounces':
-        setValue('grams', val / conversions.grams_ounces);
-        setValue('lbs', val / 16);
+        setValue('pounds', val / 16);
         setValue('kg', val / 35.274);
+        setValue('grams', val / conversions.grams_ounces);
         break;
     }
 
@@ -490,8 +567,20 @@
 
     if (e.target.id === 'liters') {
       setValue('gallons', val * conversions.liters_gallons);
+      setValue('ml', val * 1000);
+      setValue('fluidOunces', val * 33.814);
     } else if (e.target.id === 'gallons') {
       setValue('liters', val / conversions.liters_gallons);
+      setValue('ml', val * 3785.41);
+      setValue('fluidOunces', val * 128);
+    } else if (e.target.id === 'ml') {
+      setValue('liters', val / 1000);
+      setValue('gallons', val / 3785.41);
+      setValue('fluidOunces', val / 29.5735);
+    } else if (e.target.id === 'fluidOunces') {
+      setValue('liters', val / 33.814);
+      setValue('gallons', val / 128);
+      setValue('ml', val * 29.5735);
     }
 
     updating = false;
@@ -529,25 +618,25 @@
     }
 
     switch(e.target.id) {
-      case 'sqm':
-        setValue('sqft', val * conversions.sqm_sqft);
-        setValue('sqkm', val / 1_000_000);
-        setValue('sqmi', val / 2_589_988);
+      case 'sqMeters':
+        setValue('sqFeet', val * 10.7639);
+        setValue('hectares', val / 10000);
+        setValue('acres', val / 4046.86);
         break;
-      case 'sqkm':
-        setValue('sqmi', val * conversions.sqkm_sqmi);
-        setValue('sqm', val * 1_000_000);
-        setValue('sqft', val * 1_000_000 * conversions.sqm_sqft);
+      case 'hectares':
+        setValue('acres', val * 2.47105);
+        setValue('sqMeters', val * 10000);
+        setValue('sqFeet', val * 107639);
         break;
-      case 'sqft':
-        setValue('sqm', val / conversions.sqm_sqft);
-        setValue('sqmi', val / 27_878_400);
-        setValue('sqkm', val / (27_878_400 / conversions.sqkm_sqmi));
+      case 'sqFeet':
+        setValue('sqMeters', val / 10.7639);
+        setValue('acres', val / 43560);
+        setValue('hectares', val / 107639);
         break;
-      case 'sqmi':
-        setValue('sqkm', val / conversions.sqkm_sqmi);
-        setValue('sqm', val * 2_589_988);
-        setValue('sqft', val * 27_878_400);
+      case 'acres':
+        setValue('hectares', val / 2.47105);
+        setValue('sqMeters', val * 4046.86);
+        setValue('sqFeet', val * 43560);
         break;
     }
 
@@ -565,10 +654,12 @@
       return;
     }
 
-    if (e.target.id === 'l100km') {
-      setValue('mpg', conversions.l100km_mpg[0](val));
+    if (e.target.id === 'litersPer100km') {
+      // Convert L/100km to mpg (US)
+      setValue('mpg', 235.215 / val);
     } else if (e.target.id === 'mpg') {
-      setValue('l100km', conversions.l100km_mpg[1](val));
+      // Convert mpg (US) to L/100km
+      setValue('litersPer100km', 235.215 / val);
     }
 
     updating = false;
@@ -587,8 +678,20 @@
 
     if (e.target.id === 'kpa') {
       setValue('psi', val * conversions.kpa_psi);
+      setValue('pascals', val * 1000);
+      setValue('bar', val / 100);
     } else if (e.target.id === 'psi') {
       setValue('kpa', val / conversions.kpa_psi);
+      setValue('pascals', val * 6894.76);
+      setValue('bar', val / 14.5037738);
+    } else if (e.target.id === 'pascals') {
+      setValue('kpa', val / 1000);
+      setValue('psi', val / 6894.76);
+      setValue('bar', val / 100000);
+    } else if (e.target.id === 'bar') {
+      setValue('kpa', val * 100);
+      setValue('psi', val * 14.5037738);
+      setValue('pascals', val * 100000);
     }
 
     updating = false;
@@ -605,10 +708,26 @@
       return;
     }
 
+    // 1 calorie = 4.184 joules (thermochemical calorie)
+    // 1 kilocalorie (food calorie) = 1000 calories = 4184 joules
+    // 1 kilojoule = 1000 joules
+
     if (e.target.id === 'joules') {
-      setValue('btu', val * conversions.joules_btu);
-    } else if (e.target.id === 'btu') {
-      setValue('joules', val / conversions.joules_btu);
+      setValue('calories', val / 4.184);
+      setValue('kilojoules', val / 1000);
+      setValue('kilocalories', val / 4184);
+    } else if (e.target.id === 'calories') {
+      setValue('joules', val * 4.184);
+      setValue('kilojoules', val * 0.004184);
+      setValue('kilocalories', val / 1000);
+    } else if (e.target.id === 'kilojoules') {
+      setValue('joules', val * 1000);
+      setValue('calories', val * 239.006);
+      setValue('kilocalories', val / 4.184);
+    } else if (e.target.id === 'kilocalories') {
+      setValue('joules', val * 4184);
+      setValue('calories', val * 1000);
+      setValue('kilojoules', val * 4.184);
     }
 
     updating = false;
@@ -625,94 +744,151 @@
       return;
     }
 
+    // 1 Newton = 0.224809 pound-force (lbf)
+    // 1 pound-force (lbf) = 4.44822 Newtons
     if (e.target.id === 'newtons') {
-      setValue('lbf', val * conversions.newtons_lbf);
-    } else if (e.target.id === 'lbf') {
-      setValue('newtons', val / conversions.newtons_lbf);
+      setValue('poundForce', val * 0.224809);
+    } else if (e.target.id === 'poundForce') {
+      setValue('newtons', val * 4.44822);
     }
 
     updating = false;
   }
 
   function setValue(id, val) {
-    const input = document.getElementById(id);
-    if (!input) return;
-    input.value = isNaN(val) ? '' : (Math.round(val * 1000000) / 1000000);
+    const element = document.getElementById(id);
+    if (element) {
+      updating = true;
+      // Convert to string without any decimal limitations
+      element.value = val.toString();
+      updating = false;
+    }
   }
 
-  // Attach event listeners
-  ['km', 'meters', 'cm', 'mm', 'miles', 'yards', 'feet', 'inches'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertDistance);
-  });
-
-  ['celsius', 'fahrenheit'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertTemperature);
-  });
-
-  ['kg', 'grams', 'lbs', 'ounces'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertWeight);
-  });
-
-  ['liters', 'gallons'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertVolume);
-  });
-
-  ['kmh', 'mph'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertSpeed);
-  });
-
-  ['sqm', 'sqkm', 'sqft', 'sqmi'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertArea);
-  });
-
-  ['l100km', 'mpg'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertFuelEconomy);
-  });
-
-  ['kpa', 'psi'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertPressure);
-  });
-
-  ['joules', 'btu'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertEnergy);
-  });
-
-  ['newtons', 'lbf'].forEach(id => {
-    document.getElementById(id).addEventListener('input', convertForce);
+  // Initialize event listeners when the page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    // Distance
+    ['km', 'meters', 'cm', 'mm', 'miles', 'yards', 'feet', 'inches'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertDistance);
+    });
+    
+    // Temperature
+    ['celsius', 'fahrenheit'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertTemperature);
+    });
+    
+    // Weight
+    ['kg', 'grams', 'pounds', 'ounces'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertWeight);
+    });
+    
+    // Volume
+    ['liters', 'gallons', 'ml', 'fluidOunces'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertVolume);
+    });
+    
+    // Speed
+    ['kmh', 'mph'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertSpeed);
+    });
+    
+    // Area
+    ['sqm', 'sqft', 'hectares', 'acres', 'sqkm', 'sqmi'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertArea);
+    });
+    
+    // Fuel Economy
+    ['l100km', 'mpg'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertFuelEconomy);
+    });
+    
+    // Pressure
+    ['kpa', 'psi', 'pascals', 'bar'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertPressure);
+    });
+    
+    // Energy
+    ['joules', 'btu', 'calories', 'kilojoules', 'kilocalories'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertEnergy);
+    });
+    
+    // Force
+    ['newtons', 'lbf'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', convertForce);
+    });
   });
 
   // Search filter
-  const searchInput = document.getElementById('searchInput');
-
-  searchInput.addEventListener('input', () => {
-  const filter = searchInput.value.toLowerCase();
-
-  const bubbles = document.querySelectorAll('.bubble');
-
-  bubbles.forEach(bubble => {
-    const inputGroups = bubble.querySelectorAll('.input-group');
-
-    // Check if any label inside this bubble matches the filter
-    const anyMatch = Array.from(inputGroups).some(group => {
-      const label = group.querySelector('label').textContent.toLowerCase();
-      return label.includes(filter);
-    });
-
-    if (anyMatch) {
-      // Show the whole bubble (all inputs in this group)
-      bubble.style.display = 'block';
-    } else {
-      // Hide the entire bubble
-      bubble.style.display = 'none';
-
-      // Also clear inputs in this bubble to avoid leftover values
-      inputGroups.forEach(group => {
-        const input = group.querySelector('input');
-        if (input) input.value = '';
+  function filterConversions() {
+    const filter = searchInput.value.trim();
+    const filterLower = filter.toLowerCase();
+    const tables = document.querySelectorAll('.bubble');
+    
+    // If search is empty, show all rows and tables
+    if (filter === '') {
+      tables.forEach(table => {
+        table.style.display = 'table';
+        const rows = table.querySelectorAll('tr');
+        rows.forEach(row => row.style.display = '');
       });
+      return;
     }
-  });
-});
+    
+    tables.forEach(table => {
+      const rows = table.querySelectorAll('tr'); // Include header row
+      let hasVisibleRows = false;
+      
+      // Check the category name (header)
+      const header = table.querySelector('th');
+      const categoryName = header ? header.textContent.trim().toLowerCase() : '';
+      const categoryMatches = categoryName.includes(filterLower);
+      
+      rows.forEach((row, index) => {
+        // Skip the first row (header) in each table
+        if (index === 0) return;
+        
+        const labels = row.querySelectorAll('label');
+        let rowHasMatch = false;
+        
+        // Check each label in the row
+        labels.forEach(label => {
+          const labelText = label.textContent.toLowerCase();
+          if (labelText.includes(filterLower)) {
+            rowHasMatch = true;
+          }
+        });
+        
+        if (rowHasMatch || categoryMatches) {
+          row.style.display = '';
+          hasVisibleRows = true;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+      
+      // Show/hide the entire table based on matches
+      if (hasVisibleRows || categoryMatches) {
+        table.style.display = 'table';
+        // Show the header row
+        if (rows[0]) rows[0].style.display = '';
+      } else {
+        table.style.display = 'none';
+      }
+    });
+  }
+  
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', filterConversions);
 </script>
 
 </body>
